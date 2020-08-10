@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-08-09 10:03:54 / 修改时间：10:34:19" itemprop="dateCreated datePublished" datetime="2020-08-09T10:03:54+08:00">2020-08-09</time>
+              <time title="创建时间：2020-08-09 10:03:54" itemprop="dateCreated datePublished" datetime="2020-08-09T10:03:54+08:00">2020-08-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-10 23:44:42" itemprop="dateModified" datetime="2020-08-10T23:44:42+08:00">2020-08-10</time>
+              </span>
 
           
 
@@ -204,8 +210,10 @@
 <p><img src="https://upload-images.jianshu.io/upload_images/4773465-54b59e48f484a25c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/358/format/webp"><br>从执行结果，可以看出我们已经安装了mysql-libs-5.1.73-5.el6_6.x86_64，执行删除命令</p>
 <pre><code>[root@localhost /]# rpm -e --nodeps mysql-libs-5.1.73-5.el6_6.x86_64</code></pre>
 <p>再次执行查询命令，查看是否删除<br><code>     [root@localhost /]# rpm -qa | grep mysql</code></p>
-<p>#查看服务器残留mysql数据并删除<br>    [root@localhost ~]# rpm -qa |grep -i mysql</p>
-<pre><code>[root@localhost ~]# find / -name mysql
+<p>#查看服务器残留mysql数据并删除</p>
+<pre><code>[root@localhost ~]# rpm -qa |grep -i mysql
+
+[root@localhost ~]# find / -name mysql
 
   find: ‘/run/user/1000/gvfs’: 权限不够
 
@@ -216,10 +224,32 @@
   /usr/share/mysql
 
 [root@localhost ~]# </code></pre>
-<p>#解压tar包<br>    [root@localhost ~]# cd /opt</p>
-<pre><code>[root@localhost opt]# tar jxvf mysql-8.0.21-linux-glibc2.12-x86_64.tar.xz</code></pre>
-<p>#mv到/usr/local/目录下，并命名为mysql<br>    [root@localhost opt]# mv mysql-8.0.21-linux-glibc2.12-x86_64 /usr/local/mysql<br>#创建mysql配置存放目录data<br>    [root@localhost opt]# cd /usr/local/mysql<br>    [root@localhost mysql]# ll<br>    [root@localhost mysql]# mkdir data<br>#创建mysql用户组和用户<br>    [root@localhost mysql]# groupadd mysql<br>    [root@localhost mysql]# useradd -r -g mysql mysql<br>#为mysql目录修改用户权限<br>    [root@localhost mysql]# chown -R mysql:mysql /usr/local/mysql/<br>#将mysql初始化，并记录初始密码<br>    [root@localhost mysql]# cd ../<br>    [root@localhost local]# ll<br>    [root@localhost bin]# ./mysqld –user=mysql –initialize –basedir=/usr/local/mysql –datadir=/usr/local/mysql/data<br>    2020-08-02T12:46:23.137839Z 0 [Warning] [MY-011070] [Server] ‘Disabling symbolic links using –skip-symbolic-links (or equivalent) is the default. Consider not using this option as it’ is deprecated and will be removed in a future release.<br>    2020-08-02T12:46:23.138153Z 0 [System] [MY-013169] [Server] /usr/local/mysql/bin/mysqld (mysqld 8.0.21) initializing of server in progress as process 79236<br>    2020-08-02T12:46:23.155453Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.<br>    2020-08-02T12:46:24.595659Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.<br>    2020-08-02T12:46:25.863069Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: 4lATCmkf/i+W<br>#配置mysql（my.cnf)<br>    [root@localhost bin]# vim /etc/my.cnf</p>
-<pre><code>[mysqld]
+<p>#解压tar包</p>
+<pre><code>[root@localhost ~]# cd /opt
+[root@localhost opt]# tar jxvf mysql-8.0.21-linux-glibc2.12-x86_64.tar.xz</code></pre>
+<p>#mv到/usr/local/目录下，并命名为mysql</p>
+<pre><code>[root@localhost opt]# mv mysql-8.0.21-linux-glibc2.12-x86_64 /usr/local/mysql</code></pre>
+<p>#创建mysql配置存放目录data</p>
+<pre><code>[root@localhost opt]# cd /usr/local/mysql
+[root@localhost mysql]# ll
+[root@localhost mysql]# mkdir data</code></pre>
+<p>#创建mysql用户组和用户</p>
+<pre><code>[root@localhost mysql]# groupadd mysql
+[root@localhost mysql]# useradd -r -g mysql mysql</code></pre>
+<p>#为mysql目录修改用户权限</p>
+<pre><code>[root@localhost mysql]# chown -R mysql:mysql /usr/local/mysql/</code></pre>
+<p>#将mysql初始化，并记录初始密码</p>
+<pre><code>[root@localhost mysql]# cd ../
+[root@localhost local]# ll
+[root@localhost bin]# ./mysqld --user=mysql --initialize --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+2020-08-02T12:46:23.137839Z 0 [Warning] [MY-011070] [Server] &#39;Disabling symbolic links using --skip-symbolic-links (or equivalent) is the default. Consider not using this option as it&#39; is deprecated and will be removed in a future release.
+2020-08-02T12:46:23.138153Z 0 [System] [MY-013169] [Server] /usr/local/mysql/bin/mysqld (mysqld 8.0.21) initializing of server in progress as process 79236
+2020-08-02T12:46:23.155453Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2020-08-02T12:46:24.595659Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2020-08-02T12:46:25.863069Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: 4lATCmkf/i+W</code></pre>
+<p>#配置mysql（my.cnf)  </p>
+<pre><code>[root@localhost bin]# vim /etc/my.cnf
+[mysqld]
 basedir = /usr/local/mysql
 datadir = /usr/local/mysql/data
 #skip-grant-tables
@@ -231,15 +261,48 @@ default_authentication_plugin = mysql_native_password
 
 #保存退出
 ESC-shift+:-wq</code></pre>
-<p>#mysql加入开机自启<br>    [root@localhost bin]# cd /usr/local/mysql<br>    [root@localhost mysql]# cp support-files/mysql.server /etc/init.d/mysql<br>    [root@localhost mysql]# chmod +x /etc/init.d/mysql  //添加可执行权限<br>    [root@localhost mysql]# chkconfig –add mysql   //添加开机自启<br>    [root@localhost mysql]# chkconfig –list//查看自启是否添加成功<br>    注：该输出结果只显示 SysV 服务，并不包含<br>    原生 systemd 服务。SysV 配置数据<br>    可能被原生 systemd 配置覆盖。 </p>
-<pre><code>  要列出 systemd 服务，请执行 &#39;systemctl list-unit-files&#39;。
-  查看在具体 target 启用的服务请执行
-  &#39;systemctl list-dependencies [target]&#39;。
+<p>#mysql加入开机自启</p>
+<pre><code>[root@localhost bin]# cd /usr/local/mysql
+[root@localhost mysql]# cp support-files/mysql.server /etc/init.d/mysql
+[root@localhost mysql]# chmod +x /etc/init.d/mysql  //添加可执行权限
+[root@localhost mysql]# chkconfig --add mysql   //添加开机自启
+[root@localhost mysql]# chkconfig --list//查看自启是否添加成功 
+注：该输出结果只显示 SysV 服务，并不包含
+原生 systemd 服务。SysV 配置数据
+可能被原生 systemd 配置覆盖。 
 
-mysql      0:关    1:关    2:开    3:开    4:开    5:开    6:关
-netconsole     0:关    1:关    2:关    3:关    4:关    5:关    6:关
-network    0:关    1:关    2:开    3:开    4:开    5:开    6:关</code></pre>
-<p>#配置环境变量<br>    [root@localhost mysql]# vim /etc/profile<br>    export PATH=$PATH:/usr/local/mysql/bin:/usr/local/mysql/lib  //在末尾加入 esc-shift+: - wq<br>    [root@localhost mysql]# source /etc/profile<br>#登录mysql<br>    [root@localhost mysql]# ps -ef | grep mysql<br>    root  82552  1  0 21:39 ?00:00:00 /bin/sh /usr/local/mysql/bin/mysqld_safe –datadir=/usr/local/mysql/data –pid-file=/usr/local/mysql/data/mysql.pid<br>    mysql 82730  82552  2 21:39 ?00:00:04 /usr/local/mysql/bin/mysqld –basedir=/usr/local/mysql –datadir=/usr/local/mysql/data –plugin-dir=/usr/local/mysql/lib/plugin –user=mysql –log-error=localhost.localdomain.err –pid-file=/usr/local/mysql/data/mysql.pid –socket=/usr/local/mysql/data/mysql.sock –port=3306<br>    root  82942   5819  0 21:42 pts/000:00:00 grep –color=auto mysql<br>    [root@localhost mysql]# mysql -u root -p<br>    Enter password:<br>    ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock’ (2)<br>    #修改socket<br>    [root@localhost mysql]# vim /etc/my.cnf<br>    socket = /tmp/mysql.sock<br>    #启动mysql<br>    [root@localhost mysql]# systemctl restart mysql<br>    [root@localhost mysql]# mysql -u root -p<br>#重置密码<br>    mysql&gt; ALTER user ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘root’;<br>    Query OK, 0 rows affected (0.06 sec)<br>    或<br>    mysql&gt; set password for root@localhost = password(‘root’);<br>    mysql&gt; flush privileges;<br>    mysql&gt; quit</p>
+要列出 systemd 服务，请执行 &#39;systemctl list-unit-files&#39;。
+查看在具体 target 启用的服务请执行
+&#39;systemctl list-dependencies [target]&#39;。
+
+mysql   0:关 1:关 2:开 3:开 4:开 5:开 6:关
+netconsole  0:关 1:关 2:关 3:关 4:关 5:关 6:关
+network 0:关 1:关 2:开 3:开 4:开 5:开 6:关</code></pre>
+<p>#配置环境变量</p>
+<pre><code>[root@localhost mysql]# vim /etc/profile
+export PATH=$PATH:/usr/local/mysql/bin:/usr/local/mysql/lib  //在末尾加入 esc-shift+: - wq
+[root@localhost mysql]# source /etc/profile</code></pre>
+<p>#登录mysql</p>
+<pre><code>[root@localhost mysql]# ps -ef | grep mysql
+root  82552  1  0 21:39 ?00:00:00 /bin/sh /usr/local/mysql/bin/mysqld_safe --datadir=/usr/local/mysql/data --pid-file=/usr/local/mysql/data/mysql.pid
+mysql 82730  82552  2 21:39 ?00:00:04 /usr/local/mysql/bin/mysqld --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --plugin-dir=/usr/local/mysql/lib/plugin --user=mysql --log-error=localhost.localdomain.err --pid-file=/usr/local/mysql/data/mysql.pid --socket=/usr/local/mysql/data/mysql.sock --port=3306
+root  82942   5819  0 21:42 pts/000:00:00 grep --color=auto mysql
+[root@localhost mysql]# mysql -u root -p
+Enter password: 
+ERROR 2002 (HY000): Can&#39;t connect to local MySQL server through socket &#39;/tmp/mysql.sock&#39; (2)</code></pre>
+<p>#修改socket</p>
+<pre><code>[root@localhost mysql]# vim /etc/my.cnf
+socket = /tmp/mysql.sock</code></pre>
+<p>#启动mysql</p>
+<pre><code>[root@localhost mysql]# systemctl restart mysql
+[root@localhost mysql]# mysql -u root -p</code></pre>
+<p>#重置密码</p>
+<pre><code>mysql&gt; ALTER user &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;root&#39;;
+Query OK, 0 rows affected (0.06 sec)
+或
+mysql&gt; set password for root@localhost = password(&#39;root&#39;);
+mysql&gt; flush privileges;
+mysql&gt; quit</code></pre>
 
       
     </div>
