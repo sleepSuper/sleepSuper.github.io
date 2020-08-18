@@ -155,6 +155,150 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%20%E5%AE%89%E8%A3%85Tomcat9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sleepSuper_blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%20%E5%AE%89%E8%A3%85Tomcat9/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-18 21:49:33" itemprop="dateCreated datePublished" datetime="2020-08-18T21:49:33+08:00">2020-08-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <hr>
+<h2 id="title-Linux-之-CentOS-7-安装Tomcat9"><a href="#title-Linux-之-CentOS-7-安装Tomcat9" class="headerlink" title="title:Linux 之 CentOS 7 安装Tomcat9"></a>title:Linux 之 CentOS 7 安装Tomcat9</h2><p>#Linux 之 CentOS 7 安装Tomcat9</p>
+<p>1、下载Tomcat</p>
+<p>tomcat9下载地址：<a target="_blank" rel="noopener" href="https://tomcat.apache.org/download-90.cgi">https://tomcat.apache.org/download-90.cgi</a></p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714162444081-1791893953.png"></p>
+<p>2、上传到服务器中</p>
+<p>推荐使用xftp上传</p>
+<p>3、安装tomcat</p>
+<p>3.1、解压并复制到  /usr/tomcat 中</p>
+<pre><code>cp apache-tomcat-9.0.37.tar.gz /usr/tomcat9
+
+tar -zxcf tomcat9</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714163221611-340729672.png"></p>
+<p>3.2、设置环境变量</p>
+<pre><code>vim /etc/profile
+
+# tomcat9 
+export CATALINA_HOME=/usr/tomcat9
+export PATH=$&#123;CATALINA_HOME&#125;/bin:$PATH
+
+source /etc/profile
+
+![](https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714164859665-2055316445.png)</code></pre>
+<p>3.3、配置catalina.sh文件</p>
+<pre><code>vim /usr/tomcat9/bin/catalina.sh</code></pre>
+<p>在头部添加</p>
+<pre><code>JAVA_HOME=/usr/jdk1.8.0_251
+JRE_HOME=$&#123;JAVA_HOME&#125;/jre</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714164815726-1621586091.png"></p>
+<p>3.4、启动tomcat服务</p>
+<pre><code>./startup.sh</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714165054562-2130370836.png"></p>
+<p>3.5、放行8080端口</p>
+<pre><code>#放行8080端口
+firewall-cmd --zone=public --add-port=8080/tcp --permanent
+#重启防火墙
+firewall-cmd --reload</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714165444655-661366502.png"></p>
+<p>3.6、打开浏览器访问测试</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714165723651-1028520254.png"></p>
+<p>4.2、增加 manager-gui 图形化管理界面的访问权限</p>
+<pre><code>复制代码
+vim /usr/tomcat9/conf/tomcat-users.xml
+#添加如下代码
+&lt;role rolename=&quot;manager-gui&quot;/&gt;
+&lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;manager-gui&quot;/&gt;</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714172605372-1959584854.png"></p>
+<p>修改webapps/manager/META-INF目录下的context.xml,在allow行的末尾加上|\d+.\d+.\d+.\d+表示允许所有主机访问。</p>
+<pre><code>&lt;Context antiResourceLocking=&quot;false&quot; privileged=&quot;true&quot; &gt;
+&lt;Valve className=&quot;org.apache.catalina.valves.RemoteAddrValve&quot;
+     allow=&quot;127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1|\d+\.\d+\.\d+\.\d+&quot; /&gt;
+&lt;Manager sessionAttributeValueClassNameFilter=&quot;java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap&quot;/&gt;</code></pre>
+<p>重启tomcat生效</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714173547630-631676675.png"></p>
+<p>4.3、配置tomcat开机自启</p>
+<p>在/usr/lib/systemd/system目录下增加tomcat9.service文件，内容如下：</p>
+<pre><code>[Unit]
+
+Description=Tomcat
+
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+
+
+[Service]
+
+Type=oneshot
+
+ExecStart=/usr/tomcat9/bin/startup.sh
+
+ExecStop=/usr/tomcat9/bin/shutdown.sh
+
+ExecReload=/bin/kill -s HUP $MAINPID
+
+RemainAfterExit=yes
+
+
+[Install]
+
+WantedBy=multi-user.target</code></pre>
+<p>退出并保存，执行systemctl enable tomcat9.service使tomcat9随开机启动</p>
+<pre><code>systemctl enable tomcat9.service
+systemctl start tomcat9.service    启动tomcat
+
+systemctl stop tomcat9.service    关闭tomcat   
+
+systemctl restart tomcat9.service    重启tomca</code></pre>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -693,7 +837,7 @@ mysql&gt; quit</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
