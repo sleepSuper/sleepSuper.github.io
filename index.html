@@ -155,6 +155,137 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sleepSuper_blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-18 21:18:04" itemprop="dateCreated datePublished" datetime="2020-08-18T21:18:04+08:00">2020-08-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>#Linux 之 CentOS 7安装MySQL5.7</p>
+<p>1.下载MySQL yum 包</p>
+<pre><code>wget http://repo.mysql.com/mysql57-community-release-el7-10.noarch.rpm</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001149240-691629683.png"></p>
+<p>2.安装MySQL源</p>
+<pre><code>rpm -Uvh mysql57-community-release-el7-10.noarch.rpm</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001232156-276715911.png"></p>
+<p>3.安装MySQL服务端</p>
+<pre><code>yum install -y mysql-community-server</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001436628-1002189920.png"></p>
+<p>4.启动MySQL</p>
+<pre><code>systemctl start mysqld.service</code></pre>
+<p>5.检查是否启动成功</p>
+<pre><code>systemctl status mysqld.service</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001659816-1269618999.png"></p>
+<p>6.获取临时密码</p>
+<p>mysql5.7为root用户随机生成了一个密码</p>
+<pre><code>grep &#39;temporary password&#39; /var/log/mysqld.log</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001910969-1608155237.png"></p>
+<p>7.登录mysql，修改密码</p>
+<pre><code>mysql -uroot -p</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002108851-1839799018.png"></p>
+<p>8.修改密码</p>
+<p>更改密码规则</p>
+<pre><code>mysql&gt; set global validate_password_policy=0;
+mysql&gt; set global validate_password_length=1;</code></pre>
+<p>设置密码</p>
+<pre><code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;yourpassword&#39;;</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002632145-1046783811.png"></p>
+<p>9.开启远程连接</p>
+<pre><code>mysql&gt; use mysql;
+#%代表所有连接
+mysql&gt; update user set Host = &#39;%&#39; where Host = &#39;localhost&#39; and User=&#39;root&#39;;
+#刷新权限表
+mysql&gt; flush privileges;</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714003556628-762338250.png"></p>
+<p> 10.开启开机自启</p>
+<p>一般默认自启</p>
+<pre><code>systemctl enable mysqld
+systemctl daemon-reload</code></pre>
+<p>11.设置字符集</p>
+<p>打开配置文件</p>
+<pre><code>vim /etc/my.cnf</code></pre>
+<p>改成如下</p>
+<pre><code># For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
+
+[mysql]
+default-character-set=utf8
+
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+default-storage-engine=INNODB
+character_set_server=utf8
+
+symbolic-links=0
+
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid</code></pre>
+<p>重启mysql，使配置生效</p>
+<pre><code>service mysqld restart</code></pre>
+<p>12.放行3306端口</p>
+<pre><code>#放行3306端口
+firewall-cmd --zone=public --add-port=3306/tcp --permanent
+#重启防火墙
+firewall-cmd --reload</code></pre>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005314813-770407147.png"></p>
+<p>13.卸载mysql仓库</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005727658-2016803768.png"></p>
+<p>14.navicat连接测试</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005948155-2013309107.png"></p>
+<p>使用navicat创建数据库，创建表，添加数据。服务端测试查询</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714010615954-134416787.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2020/08/17/Linux_JDK/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -561,7 +692,7 @@ mysql&gt; quit</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
