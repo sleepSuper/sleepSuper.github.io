@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sleepsuper.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="#Linux 之 CentOS 7安装MySQL5.7 1.下载MySQL yum 包 1wget http:&#x2F;&#x2F;repo.mysql.com&#x2F;mysql57-community-release-el7-10.noarch.rpm     2.安装MySQL源 1rpm -Uvh mysql57-community-release-el7-10.noarch.rpm     3.安装MySQL服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 之 CentOS 7安装MySQL5.7">
+<meta property="og:url" content="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/index.html">
+<meta property="og:site_name" content="sleepSuper_blog">
+<meta property="og:description" content="#Linux 之 CentOS 7安装MySQL5.7 1.下载MySQL yum 包 1wget http:&#x2F;&#x2F;repo.mysql.com&#x2F;mysql57-community-release-el7-10.noarch.rpm     2.安装MySQL源 1rpm -Uvh mysql57-community-release-el7-10.noarch.rpm     3.安装MySQL服务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001149240-691629683.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001232156-276715911.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001436628-1002189920.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001659816-1269618999.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001910969-1608155237.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002108851-1839799018.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002632145-1046783811.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714003556628-762338250.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005314813-770407147.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005727658-2016803768.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005948155-2013309107.png">
+<meta property="og:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714010615954-134416787.png">
+<meta property="article:published_time" content="2020-08-18T13:18:04.743Z">
+<meta property="article:modified_time" content="2022-01-08T04:55:48.935Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001149240-691629683.png">
+
+<link rel="canonical" href="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux 之 CentOS 7安装MySQL5.7 | sleepSuper_blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sleepSuper_blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%E5%AE%89%E8%A3%85MySQL5.7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sleepSuper_blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 之 CentOS 7安装MySQL5.7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-18 21:18:04" itemprop="dateCreated datePublished" datetime="2020-08-18T21:18:04+08:00">2020-08-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-08 12:55:48" itemprop="dateModified" datetime="2022-01-08T12:55:48+08:00">2022-01-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>#Linux 之 CentOS 7安装MySQL5.7</p>
+<p>1.下载MySQL yum 包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://repo.mysql.com/mysql57-community-release-el7-10.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001149240-691629683.png"></p>
+<p>2.安装MySQL源</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh mysql57-community-release-el7-10.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001232156-276715911.png"></p>
+<p>3.安装MySQL服务端</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y mysql-community-server</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001436628-1002189920.png"></p>
+<p>4.启动MySQL</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld.service</span><br></pre></td></tr></table></figure>
+
+<p>5.检查是否启动成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status mysqld.service</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001659816-1269618999.png"></p>
+<p>6.获取临时密码</p>
+<p>mysql5.7为root用户随机生成了一个密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&#x27;temporary password&#x27;</span> /var/<span class="built_in">log</span>/mysqld.log</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714001910969-1608155237.png"></p>
+<p>7.登录mysql，修改密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002108851-1839799018.png"></p>
+<p>8.修改密码</p>
+<p>更改密码规则</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_policy=0;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> global validate_password_length=1;</span><br></pre></td></tr></table></figure>
+
+<p>设置密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;yourpassword&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714002632145-1046783811.png"></p>
+<p>9.开启远程连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use mysql;</span><br><span class="line"><span class="comment">#%代表所有连接</span></span><br><span class="line">mysql&gt; update user <span class="built_in">set</span> Host = <span class="string">&#x27;%&#x27;</span> <span class="built_in">where</span> Host = <span class="string">&#x27;localhost&#x27;</span> and User=<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line"><span class="comment">#刷新权限表</span></span><br><span class="line">mysql&gt; flush privileges;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714003556628-762338250.png"></p>
+<p> 10.开启开机自启</p>
+<p>一般默认自启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> mysqld</span><br><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<p>11.设置字符集</p>
+<p>打开配置文件</p>
+<pre><code>vim /etc/my.cnf</code></pre>
+<p>改成如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># For advice on how to change settings please see</span></span><br><span class="line"><span class="comment"># http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html</span></span><br><span class="line"> </span><br><span class="line">[mysql]</span><br><span class="line">default-character-set=utf8</span><br><span class="line"> </span><br><span class="line">[mysqld]</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">socket=/var/lib/mysql/mysql.sock</span><br><span class="line">default-storage-engine=INNODB</span><br><span class="line">character_set_server=utf8</span><br><span class="line"> </span><br><span class="line">symbolic-links=0</span><br><span class="line"> </span><br><span class="line"><span class="built_in">log</span>-error=/var/<span class="built_in">log</span>/mysqld.log</span><br><span class="line">pid-file=/var/run/mysqld/mysqld.pid</span><br></pre></td></tr></table></figure>
+
+<p>重启mysql，使配置生效</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
+
+<p>12.放行3306端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#放行3306端口</span></span><br><span class="line">firewall-cmd --zone=public --add-port=3306/tcp --permanent</span><br><span class="line"><span class="comment">#重启防火墙</span></span><br><span class="line">firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005314813-770407147.png"></p>
+<p>13.卸载mysql仓库</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005727658-2016803768.png"></p>
+<p>14.navicat连接测试</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714005948155-2013309107.png"></p>
+<p>使用navicat创建数据库，创建表，添加数据。服务端测试查询</p>
+<p><img src="https://img2020.cnblogs.com/blog/1480764/202007/1480764-20200714010615954-134416787.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/17/Linux_JDK/" rel="prev" title="Linux 之 CentOS 7 安装JDK1.8">
+      <i class="fa fa-chevron-left"></i> Linux 之 CentOS 7 安装JDK1.8
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/18/Linux%20%E4%B9%8B%20CentOS%207%20%E5%AE%89%E8%A3%85Tomcat9/" rel="next" title="Linux之CentOS7 安装Tomcat9">
+      Linux之CentOS7 安装Tomcat9 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-miku"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

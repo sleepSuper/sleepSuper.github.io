@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"sleepsuper.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.安装Tomcat 使用xftp上传apache-tomcat-7.0.109.tar.gz到 tomcat7[root@localhost ~]# cd &#x2F;usr&#x2F;tomcat7[root@localhost tomcat7]# lsapache-tomcat-7.0.109.tar.gz[root@localhost tomcat7]# tar zxvf apache-tomcat-7.0.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux安装tomcat7">
+<meta property="og:url" content="https://sleepsuper.github.io/2021/07/18/linux%E5%AE%89%E8%A3%85tomcat7/index.html">
+<meta property="og:site_name" content="sleepSuper_blog">
+<meta property="og:description" content="1.安装Tomcat 使用xftp上传apache-tomcat-7.0.109.tar.gz到 tomcat7[root@localhost ~]# cd &#x2F;usr&#x2F;tomcat7[root@localhost tomcat7]# lsapache-tomcat-7.0.109.tar.gz[root@localhost tomcat7]# tar zxvf apache-tomcat-7.0.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-18T01:26:27.075Z">
+<meta property="article:modified_time" content="2021-07-18T05:02:49.028Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://sleepsuper.github.io/2021/07/18/linux%E5%AE%89%E8%A3%85tomcat7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux安装tomcat7 | sleepSuper_blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">sleepSuper_blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://sleepsuper.github.io/2021/07/18/linux%E5%AE%89%E8%A3%85tomcat7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sleepSuper_blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux安装tomcat7
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-18 09:26:27 / 修改时间：13:02:49" itemprop="dateCreated datePublished" datetime="2021-07-18T09:26:27+08:00">2021-07-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>1.安装Tomcat</p>
+<p>使用xftp上传apache-tomcat-7.0.109.tar.gz到 tomcat7<br>[root@localhost ~]# cd /usr/tomcat7<br>[root@localhost tomcat7]# ls<br>apache-tomcat-7.0.109.tar.gz<br>[root@localhost tomcat7]# tar zxvf apache-tomcat-7.0.109.tar.gz</p>
+<p>2.环境变量</p>
+<p>[root@localhost tomcat7]# vim /etc/profile</p>
+<p>export CATALINA_HOME=/usr/tomcat7<br>export PATH=${CATALINA_HOME}/bin:$PATH</p>
+<p>[root@localhost tomcat7]# source /etc/profile</p>
+<p>3.配置catalina.sh文件<br>vim /usr/tomcat7/apache-tomcat-7.0.109/bin/catalina.sh</p>
+<p>在头部添加</p>
+<p>JAVA_HOME=/usr/jdk1.8.0_221<br>JRE_HOME=${JAVA_HOME}/jre</p>
+<p>4.启动tomcat服务</p>
+<p>[root@localhost ~]# cd /usr/tomcat7/apache-tomcat-7.0.109/bin<br>[root@localhost bin]# ./startup.sh</p>
+<p>5.开放8080端口</p>
+<p>#放行8080端口<br>[root@localhost bin]# firewall-cmd –zone=public –add-port=8080/tcp –permanent<br>success<br>#重启防火墙<br>[root@localhost bin]# firewall-cmd –reload<br>success<br>6.增加 manager-gui 图形化管理界面的访问权限</p>
+<p>[root@localhost bin]# vim /usr/tomcat7/apache-tomcat-7.0.109/conf/tomcat-users.xml</p>
+<p>#添加如下代码</p>
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="manager-jmx"/>
+<role rolename="manager-status"/>
+<role rolename="admin-gui"/>
+<user password="admin" roles="manager-gui,manager-script,manager-jmx,manager-status,admin-gui" username="admin"/>
+
+<p>#修改webapps/manager/META-INF目录下的context.xml,在allow行的末尾加上|\d+.\d+.\d+.\d+表示允许所有主机访问。<br>[root@localhost /]# cd /usr/tomcat7/apache-tomcat-7.0.109/webapps/manager/META-INF<br>[root@localhost META-INF]# vim context.xml</p>
+<pre><code>&lt;Context antiResourceLocking=&quot;false&quot; privileged=&quot;true&quot; &gt;
+&lt;Valve className=&quot;org.apache.catalina.valves.RemoteAddrValve&quot;
+     allow=&quot;127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1|\d+.\d+.\d+.\d+&quot; /&gt;
+&lt;Manager sessionAttributeValueClassNameFilter=&quot;java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap&quot;/&gt;
+&lt;/Context&gt;</code></pre>
+<p>重启tomcat生效</p>
+<p>[root@localhost META-INF]# cd /usr/tomcat7/apache-tomcat-7.0.109/bin/</p>
+<p>[root@localhost bin]# ./startup.sh </p>
+<p>7.配置tomcat开机自启</p>
+<p>#在/usr/lib/systemd/system目录下增加tomcat.service文件，内容如下：</p>
+<p>[root@localhost bin]# cd /usr/lib/systemd/system</p>
+<p>[root@localhost system]# vim tomcat.service</p>
+<pre><code>[Unit]
+
+Description=Tomcat
+
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+
+[Service]
+
+Type=oneshot
+
+ExecStart=/usr/tomcat7/apache-tomcat-7.0.109/bin/startup.sh
+
+ExecStop=/usr/tomcat7/apache-tomcat7.0.109/bin/shutdown.sh
+
+ExecReload=/bin/kill -s HUP $MAINPID
+
+RemainAfterExit=yes
+
+
+[Install]
+
+WantedBy=multi-user.target</code></pre>
+<p>退出并保存，执行systemctl enable tomcat.service使tomcat随开机启动</p>
+<p>[root@localhost system]# systemctl enable tomcat.service</p>
+<p>[root@localhost system]# systemctl start tomcat.service     #启动tomcat</p>
+<p>[root@localhost system]# systemctl stop tomcat.service     #关闭tomcat</p>
+<p>[root@localhost system]# systemctl restart tomcat.service  # 重启tomcat</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/06/centos7%E5%AE%89%E8%A3%85docker/" rel="prev" title="centos7安装docker">
+      <i class="fa fa-chevron-left"></i> centos7安装docker
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/18/linux%E5%AE%89%E8%A3%85mysql5.7/" rel="next" title="linux rpm 安装mysql5.7">
+      linux rpm 安装mysql5.7 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-miku"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
